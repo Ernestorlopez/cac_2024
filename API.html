@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rick and Morty API</title>
+
+    <link href="./main.css" rel="stylesheet" />
+  </head>
+
+  <body>
+    <div id="site-border-left"></div>
+    <div id="site-border-right"></div>
+    <div id="site-border-top"></div>
+    <div id="site-border-bottom"></div>
+
+    <header>
+      <nav class="navbar navbar-fixed-top navbar-inverse">
+        <div class="container">
+          <button
+            type="button"
+            class="navbar-toggle collapsed"
+            data-toggle="collapse"
+            data-target="#navbar-collapse"
+            aria-expanded="false"
+          >
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbar-collapse">
+            <ul class="nav navbar-nav">
+              <li><a href="./index.html" title="">01 : HOME</a></li>
+              <li><a href="./works.html" title="">02 : WORKS</a></li>
+              <li><a href="./about.html" title="">03 : ABOUT ME</a></li>
+              <li><a href="./contact.html" title="">04 : CONTACT</a></li>
+              <li><a href="./API.html" title="">05 : API</a></li>
+              <li><a href="./login.html" title="">06 : LOGIN</a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+    <div class="section-container">
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-8 col-sm-offset-2 section-container-spacer">
+            <div class="text-center">
+              <h2 class="h2">05 : Personajes de Rick and Morty</h2>
+            </div>
+          </div>
+
+          <div class="col-md-12">
+            <div class="container">
+              <div id="characterList"></div>
+              <button onclick="fetchCharacters()">Cargar Personajes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function fetchCharacters() {
+        fetch("https://rickandmortyapi.com/api/character/")
+          .then((response) => response.json())
+          .then((data) => {
+            const characterListDiv = document.getElementById("characterList");
+            characterListDiv.innerHTML = "";
+
+            data.results.forEach((character) => {
+              const characterDiv = document.createElement("div");
+              characterDiv.classList.add("character");
+
+              const image = document.createElement("img");
+              image.src = character.image;
+              image.alt = character.name;
+
+              const name = document.createElement("h3");
+              name.textContent = character.name;
+
+              const species = document.createElement("p");
+              species.textContent = "Especie: " + character.species;
+
+              const status = document.createElement("p");
+              status.textContent = "Estado: " + character.status;
+
+              characterDiv.appendChild(image);
+              characterDiv.appendChild(name);
+              characterDiv.appendChild(species);
+              characterDiv.appendChild(status);
+
+              characterListDiv.appendChild(characterDiv);
+            });
+          })
+          .catch((error) => {
+            console.error(
+              "Error al obtener los personajes de Rick and Morty:",
+              error
+            );
+            const characterListDiv = document.getElementById("characterList");
+            characterListDiv.innerHTML =
+              "<p>¡Ups! Parece que ha ocurrido un error al obtener los personajes de Rick and Morty. Intenta nuevamente más tarde.</p>";
+          });
+      }
+    </script>
+  </body>
+</html>
